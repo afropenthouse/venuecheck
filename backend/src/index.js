@@ -11,6 +11,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://venue-orcin.vercel.app',
+    'https://venuecheck.vercel.app',
     /^https:\/\/.*\.vercel\.app$/
   ],
   credentials: true
