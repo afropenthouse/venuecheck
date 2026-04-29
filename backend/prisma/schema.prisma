@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String?
+  brand    String?
+  
+  venues    Venue[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Venue {
+  id              String   @id @default(cuid())
+  name            String
+  location       String
+  maxGuests       Int
+  pricePerDay     Int
+  description    String   @db.Text
+  images         String[]
+  amenities      String[]
+  unavailableDates String[]
+  
+  hostId         String
+  host          User     @relation(fields: [hostId], references: [id])
+  
+  bookings      Booking[]
+  feedback      Feedback[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  guestEmail      String
+  guestPhone      String
+  guestName      String
+  guests         Int
+  bookingDate    DateTime
+  inspectionDate DateTime?
+  status         BookingStatus @default(PENDING)
+  
+  venueId         String
+  venue          Venue         @relation(fields: [venueId], references: [id])
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  CANCELLED
+}
+
+model Settings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  notificationNewBooking      Boolean @default(true)
+  notificationInspection    Boolean @default(true)
+  notificationFeedback        Boolean @default(true)
+  notificationWeekly        Boolean @default(true)
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  venueId     String
+  venue       Venue    @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  rating      Int      // 1-5 stars
+  comment     String?  @db.Text
+  guestName   String
+  guestEmail  String?
+  createdAt   DateTime @default(now())
+  
+  @@index([venueId])
+  @@index([createdAt])
+}

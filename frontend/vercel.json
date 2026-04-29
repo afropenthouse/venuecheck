@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "FRONTEND_URL": "https://venue-orcin.vercel.app/",
+    "VITE_API_URL": "https://venue-xcqd.onrender.com/api"
+  }
+}

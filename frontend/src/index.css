@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Venue Flow — Editorial emerald + cream design system. All colors HSL. */
+
+@layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 160 25% 12%;
+
+    --card: 40 40% 99%;
+    --card-foreground: 160 25% 12%;
+
+    --popover: 40 40% 99%;
+    --popover-foreground: 160 25% 12%;
+
+    --primary: 160 45% 18%;
+    --primary-foreground: 40 33% 97%;
+    --primary-glow: 158 50% 32%;
+
+    --secondary: 38 30% 92%;
+    --secondary-foreground: 160 25% 14%;
+
+    --muted: 38 25% 93%;
+    --muted-foreground: 160 10% 38%;
+
+    --accent: 18 70% 60%;
+    --accent-foreground: 40 33% 98%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 40 33% 97%;
+
+    --border: 38 20% 86%;
+    --input: 38 20% 88%;
+    --ring: 160 45% 25%;
+
+    --radius: 0.75rem;
+
+    --gradient-hero: linear-gradient(135deg, hsl(160 45% 18%) 0%, hsl(158 50% 28%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(40 33% 97%) 0%, hsl(38 30% 92%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(18 70% 60%) 0%, hsl(28 75% 65%) 100%);
+
+    --shadow-soft: 0 2px 12px -4px hsl(160 30% 15% / 0.08);
+    --shadow-elegant: 0 20px 50px -20px hsl(160 45% 18% / 0.25);
+    --shadow-glow: 0 0 60px hsl(158 50% 32% / 0.25);
+
+    --transition-smooth: cubic-bezier(0.32, 0.72, 0, 1);
+
+    --sidebar-background: 160 45% 14%;
+    --sidebar-foreground: 40 30% 92%;
+    --sidebar-primary: 18 70% 60%;
+    --sidebar-primary-foreground: 40 33% 98%;
+    --sidebar-accent: 160 40% 20%;
+    --sidebar-accent-foreground: 40 33% 97%;
+    --sidebar-border: 160 35% 22%;
+    --sidebar-ring: 18 70% 60%;
+  }
+
+  .dark {
+    --background: 160 25% 8%;
+    --foreground: 40 33% 95%;
+    --card: 160 25% 11%;
+    --card-foreground: 40 33% 95%;
+    --popover: 160 25% 11%;
+    --popover-foreground: 40 33% 95%;
+    --primary: 158 50% 55%;
+    --primary-foreground: 160 45% 10%;
+    --secondary: 160 20% 16%;
+    --secondary-foreground: 40 33% 95%;
+    --muted: 160 20% 14%;
+    --muted-foreground: 40 15% 65%;
+    --accent: 18 70% 60%;
+    --accent-foreground: 40 33% 98%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 40 33% 97%;
+    --border: 160 20% 18%;
+    --input: 160 20% 18%;
+    --ring: 158 50% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  h1, h2, h3, .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-feature-settings: 'ss01';
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-warm { background: var(--gradient-warm); }
+  .bg-gradient-accent { background: var(--gradient-accent); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .transition-smooth { transition: all 0.4s var(--transition-smooth); }
+  .text-balance { text-wrap: balance; }
+}
