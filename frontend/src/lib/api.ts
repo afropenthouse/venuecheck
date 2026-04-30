@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const getToken = () => {
   const token = localStorage.getItem('token');
@@ -38,12 +38,12 @@ export const api = {
       console.log('Login successful, token received');
       return data;
     },
-    register: async (email: string, password: string, name?: string, brand?: string) => {
+    register: async (email: string, password: string, name?: string) => {
       console.log('API: Register request for:', email);
       const res = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, brand })
+        body: JSON.stringify({ email, password, name })
       });
       if (!res.ok) {
         console.error('Registration failed:', res.status, res.statusText);
@@ -51,6 +51,38 @@ export const api = {
       }
       const data = await res.json();
       console.log('Registration successful');
+      return data;
+    },
+    verifyEmail: async (email: string, code: string) => {
+      console.log('API: Verify email request for:', email);
+      const res = await fetch(`${API_URL}/auth/verify-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code })
+      });
+      if (!res.ok) {
+        console.error('Email verification failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Verification failed');
+      }
+      const data = await res.json();
+      console.log('Email verification successful');
+      return data;
+    },
+    resendVerification: async (email: string) => {
+      console.log('API: Resend verification request for:', email);
+      const res = await fetch(`${API_URL}/auth/resend-verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (!res.ok) {
+        console.error('Resend verification failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to resend code');
+      }
+      const data = await res.json();
+      console.log('Resend verification successful');
       return data;
     }
   },

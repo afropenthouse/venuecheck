@@ -8,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String
-  name      String?
-  brand    String?
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  emailVerified Boolean   @default(false)
   
-  venues    Venue[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  venues        Venue[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Venue {

@@ -81,7 +81,11 @@ const Inspections = () => {
     }
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  );
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -107,54 +111,54 @@ const Inspections = () => {
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <Calendar className="h-4 w-4 text-blue-600" />
+        <Card className="shadow-soft hover:shadow-elegant transition-shadow duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center shadow-soft">
+                <Calendar className="h-5 w-5 text-blue-600" />
               </div>
-              <div>
-                <p className="text-2xl font-bold">{bookings.length}</p>
-                <p className="text-xs text-muted-foreground">Total Requests</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center">
-                <Clock className="h-4 w-4 text-yellow-600" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{bookings.filter(b => b.status === "PENDING").length}</p>
-                <p className="text-xs text-muted-foreground">Pending</p>
+              <div className="flex-1">
+                <p className="text-2xl font-bold text-foreground">{bookings.length}</p>
+                <p className="text-xs text-muted-foreground font-medium">Total Requests</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <Check className="h-4 w-4 text-green-600" />
+        <Card className="shadow-soft hover:shadow-elegant transition-shadow duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-yellow-50 to-yellow-100 flex items-center justify-center shadow-soft">
+                <Clock className="h-5 w-5 text-yellow-600" />
               </div>
-              <div>
-                <p className="text-2xl font-bold">{bookings.filter(b => b.status === "APPROVED").length}</p>
-                <p className="text-xs text-muted-foreground">Approved</p>
+              <div className="flex-1">
+                <p className="text-2xl font-bold text-foreground">{bookings.filter(b => b.status === "PENDING").length}</p>
+                <p className="text-xs text-muted-foreground font-medium">Pending</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
-                <X className="h-4 w-4 text-red-600" />
+        <Card className="shadow-soft hover:shadow-elegant transition-shadow duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center shadow-soft">
+                <Check className="h-5 w-5 text-green-600" />
               </div>
-              <div>
-                <p className="text-2xl font-bold">{bookings.filter(b => b.status === "DECLINED").length}</p>
-                <p className="text-xs text-muted-foreground">Declined</p>
+              <div className="flex-1">
+                <p className="text-2xl font-bold text-foreground">{bookings.filter(b => b.status === "APPROVED").length}</p>
+                <p className="text-xs text-muted-foreground font-medium">Approved</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="shadow-soft hover:shadow-elegant transition-shadow duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center shadow-soft">
+                <X className="h-5 w-5 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-2xl font-bold text-foreground">{bookings.filter(b => b.status === "DECLINED").length}</p>
+                <p className="text-xs text-muted-foreground font-medium">Declined</p>
               </div>
             </div>
           </CardContent>
@@ -162,32 +166,34 @@ const Inspections = () => {
       </div>
 
       {/* Filters */}
-      <Card>
-        <CardHeader>
+      <Card className="shadow-soft">
+        <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Filter className="h-5 w-5" />
+            <Filter className="h-5 w-5 text-primary" />
             Filters
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium">Status:</label>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
-                  <SelectItem value="APPROVED">Approved</SelectItem>
-                  <SelectItem value="DECLINED">Declined</SelectItem>
-                  <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
+        <CardContent className="pt-0">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium whitespace-nowrap">Status:</label>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-32 sm:w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="PENDING">Pending</SelectItem>
+                    <SelectItem value="APPROVED">Approved</SelectItem>
+                    <SelectItem value="DECLINED">Declined</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="text-sm text-muted-foreground">
-              Showing {filteredBookings.length} of {bookings.length} requests
+              Showing <span className="font-medium">{filteredBookings.length}</span> of <span className="font-medium">{bookings.length}</span> requests
             </div>
           </div>
         </CardContent>
@@ -195,11 +201,13 @@ const Inspections = () => {
 
       {/* Bookings List */}
       {filteredBookings.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <Calendar className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No inspection requests found</h3>
-            <p className="text-muted-foreground">
+        <Card className="shadow-soft">
+          <CardContent className="py-16 text-center">
+            <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center mb-6">
+              <Calendar className="h-8 w-8 text-primary" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-2">No inspection requests found</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
               {statusFilter === "all" 
                 ? "No booking requests yet. When guests request inspections, they'll appear here."
                 : `No ${statusFilter.toLowerCase()} requests found.`}
@@ -209,69 +217,103 @@ const Inspections = () => {
       ) : (
         <div className="space-y-4">
           {filteredBookings.map((booking) => (
-            <Card key={booking.id} className="shadow-soft">
+            <Card key={booking.id} className={`shadow-soft hover:shadow-elegant transition-all duration-300 ${booking.status === "PENDING" ? "ring-2 ring-yellow-200 ring-opacity-50" : ""}`}>
               <CardContent className="p-6">
-                <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 font-medium text-primary flex-shrink-0">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-full font-medium flex-shrink-0 shadow-soft ${
+                        booking.status === "PENDING" 
+                          ? "bg-gradient-to-br from-yellow-100 to-yellow-200 text-yellow-700 animate-pulse" 
+                          : "bg-gradient-to-br from-primary/10 to-primary/5 text-primary"
+                      }`}>
                         {booking.guestName[0]}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-lg truncate">{booking.guestName}</h3>
-                          <Badge className={getStatusColor(booking.status)}>
-                            {booking.status}
-                          </Badge>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-semibold text-lg text-foreground truncate">{booking.guestName}</h3>
+                            <Badge className={`${getStatusColor(booking.status)} text-xs font-medium px-3 py-1 ${
+                              booking.status === "PENDING" ? "animate-pulse shadow-sm" : ""
+                            }`}>
+                              {booking.status}
+                            </Badge>
+                          </div>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">{booking.venue.name}</p>
+                        <p className="text-sm text-muted-foreground mb-4 font-medium">{booking.venue.name}</p>
                         
-                        <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2 lg:grid-cols-4">
-                          <span className="flex items-center gap-1.5">
-                            <Mail className="h-3.5 w-3.5 flex-shrink-0" />
-                            <span className="truncate">{booking.guestEmail}</span>
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Phone className="h-3.5 w-3.5 flex-shrink-0" />
-                            <span className="truncate">{booking.guestPhone}</span>
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 flex-shrink-0" />
-                            {booking.guests} guests
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
-                            <span className="truncate">{booking.venue.location}</span>
-                          </span>
-                        </div>
-
-                        <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2 mt-2">
-                          <span className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
-                            Booking: {booking.bookingDate ? format(new Date(booking.bookingDate), "MMM d, yyyy h:mm a") : "TBD"}
-                          </span>
-                          {booking.inspectionDate && (
-                            <span className="flex items-center gap-1.5">
-                              <Clock className="h-3.5 w-3.5 flex-shrink-0" />
-                              Inspection: {format(new Date(booking.inspectionDate), "MMM d, yyyy h:mm a")}
+                        <div className="space-y-3">
+                          <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                            <span className="flex items-center gap-2">
+                              <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                <Mail className="h-4 w-4 text-blue-600" />
+                              </div>
+                              <span className="truncate">{booking.guestEmail}</span>
                             </span>
-                          )}
-                        </div>
+                            <span className="flex items-center gap-2">
+                              <div className="h-8 w-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                                <Phone className="h-4 w-4 text-green-600" />
+                              </div>
+                              <span className="truncate">{booking.guestPhone}</span>
+                            </span>
+                            <span className="flex items-center gap-2">
+                              <div className="h-8 w-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                                <Users className="h-4 w-4 text-purple-600" />
+                              </div>
+                              <span>{booking.guests} guests</span>
+                            </span>
+                            <span className="flex items-center gap-2">
+                              <div className="h-8 w-8 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
+                                <MapPin className="h-4 w-4 text-orange-600" />
+                              </div>
+                              <span className="truncate">{booking.venue.location}</span>
+                            </span>
+                          </div>
 
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Requested {format(new Date(booking.createdAt), "MMM d, yyyy 'at' h:mm a")}
-                        </p>
+                          <div className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                            <span className="flex items-center gap-2">
+                              <div className="h-8 w-8 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                                <Calendar className="h-4 w-4 text-indigo-600" />
+                              </div>
+                              <span>Booking: {booking.bookingDate ? format(new Date(booking.bookingDate), "MMM d, yyyy h:mm a") : "TBD"}</span>
+                            </span>
+                            {booking.inspectionDate && (
+                              <span className="flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-pink-50 flex items-center justify-center flex-shrink-0">
+                                  <Clock className="h-4 w-4 text-pink-600" />
+                                </div>
+                                <span>Inspection: {format(new Date(booking.inspectionDate), "MMM d, yyyy h:mm a")}</span>
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t">
+                            <Calendar className="h-3 w-3" />
+                            Requested {format(new Date(booking.createdAt), "MMM d, yyyy 'at' h:mm a")}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
                   {booking.status === "PENDING" && (
-                    <div className="flex gap-2 flex-shrink-0">
-                      <Button variant="outline" size="sm" onClick={() => handleDecline(booking.id)}>
-                        <X className="h-4 w-4" /> Decline
+                    <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0 lg:ml-4 w-full sm:w-auto">
+                      <Button 
+                        variant="outline" 
+                        size="default" 
+                        onClick={() => handleDecline(booking.id)}
+                        className="w-full sm:w-auto hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-colors border-2 bg-white shadow-sm"
+                      >
+                        <X className="h-4 w-4" /> 
+                        <span className="ml-2">Decline</span>
                       </Button>
-                      <Button size="sm" className="bg-primary hover:bg-primary-glow" onClick={() => handleApprove(booking.id)}>
-                        <Check className="h-4 w-4" /> Approve
+                      <Button 
+                        size="default" 
+                        className="w-full sm:w-auto bg-primary hover:bg-primary-glow shadow-soft hover:shadow-elegant transition-all font-medium" 
+                        onClick={() => handleApprove(booking.id)}
+                      >
+                        <Check className="h-4 w-4" /> 
+                        <span className="ml-2">Approve</span>
                       </Button>
                     </div>
                   )}

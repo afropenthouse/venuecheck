@@ -31,7 +31,7 @@ export const DashboardSidebar = () => {
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-gradient-accent" />
-          <span className="font-display text-lg font-semibold text-sidebar-foreground">Venue Flow</span>
+          <span className="font-display text-lg font-semibold text-sidebar-foreground">Venue Check</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>

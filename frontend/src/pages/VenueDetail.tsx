@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { format } from "date-fns";
-import { ArrowLeft, MapPin, Users, Share2, CalendarCheck } from "lucide-react";
+import { ArrowLeft, MapPin, Users, CalendarCheck, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -26,6 +27,9 @@ const VenueDetail = () => {
   const [form, setForm] = useState({ email: "", phone: "", guests: "", name: "" });
   const [submitting, setSubmitting] = useState(false);
   const [inspectionDate, setInspectionDate] = useState<Date | undefined>();
+  const [inspectionHour, setInspectionHour] = useState("10");
+  const [inspectionMinute, setInspectionMinute] = useState("00");
+  const [inspectionPeriod, setInspectionPeriod] = useState<"AM" | "PM">("AM");
 
   useEffect(() => {
     loadVenue();
@@ -95,13 +99,19 @@ const VenueDetail = () => {
   const handleConfirmInspectionFinal = async () => {
     setSubmitting(true);
     const guests = Number(form.guests);
-    const timeInput = (document.getElementById("inspectionTime") as HTMLInputElement)?.value || "10:00";
     
     let combinedInspectionDate = null;
     if (inspectionDate) {
-      const [hours, minutes] = timeInput.split(":").map(Number);
+      // Convert 12-hour format to 24-hour format
+      let hours = parseInt(inspectionHour);
+      if (inspectionPeriod === "PM" && hours !== 12) {
+        hours += 12;
+      } else if (inspectionPeriod === "AM" && hours === 12) {
+        hours = 0;
+      }
+      
       const combined = new Date(inspectionDate);
-      combined.setHours(hours, minutes, 0, 0);
+      combined.setHours(hours, parseInt(inspectionMinute), 0, 0);
       combinedInspectionDate = combined.toISOString();
     }
     
@@ -132,23 +142,12 @@ const VenueDetail = () => {
     toast.success("Confirmation sent to your email.");
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success("Share link copied to clipboard");
-  };
-
+  
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      {step === "browse" && (
-        <div className="container py-8">
-          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> Back
-          </Link>
-        </div>
-      )}
-
+      
       {/* Side-by-side hero + booking */}
       <section className="container pb-20">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
@@ -167,15 +166,18 @@ const VenueDetail = () => {
                 <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{venue.location}</span>
                 <span className="flex items-center gap-1"><Users className="h-4 w-4" />Up to {venue.maxGuests}</span>
               </div>
-              <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="mt-4">
                 <div className="flex items-baseline gap-1.5">
                   <span className="font-display text-xl font-semibold sm:text-2xl">₦{venue.pricePerDay.toLocaleString()}</span>
                   <span className="text-sm text-muted-foreground">/day</span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={handleShare} className="gap-2 text-muted-foreground hover:text-foreground w-full sm:w-auto">
-                  <Share2 className="h-4 w-4" /> Share
-                </Button>
               </div>
+              {venue.description && (
+                <div className="mt-6 p-4 rounded-xl bg-muted/50 border border-border">
+                  <h3 className="font-medium text-sm mb-2">About this venue</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{venue.description}</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -206,8 +208,6 @@ const VenueDetail = () => {
           </div>
         </div>
       </section>
-
-      <SiteFooter />
 
       {/* Booking dialog */}
       <Dialog open={openDialog} onOpenChange={(o) => { setOpenDialog(o); if (!o) { setStep("browse"); setInspectionDate(undefined); } }}>
@@ -266,8 +266,48 @@ const VenueDetail = () => {
                   />
                 </div>
                 <div>
-                  <Label>Inspection Time</Label>
-                  <Input type="time" className="mt-1" defaultValue="10:00" id="inspectionTime" />
+                  <Label className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Inspection Time
+                  </Label>
+                  <div className="mt-2 flex gap-2">
+                    <Select value={inspectionHour} onValueChange={setInspectionHour}>
+                      <SelectTrigger className="w-20">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                          <SelectItem key={hour} value={hour.toString()}>
+                            {hour}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <span className="flex items-center text-muted-foreground">:</span>
+                    <Select value={inspectionMinute} onValueChange={setInspectionMinute}>
+                      <SelectTrigger className="w-20">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="00">00</SelectItem>
+                        <SelectItem value="15">15</SelectItem>
+                        <SelectItem value="30">30</SelectItem>
+                        <SelectItem value="45">45</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select value={inspectionPeriod} onValueChange={(value: "AM" | "PM") => setInspectionPeriod(value)}>
+                      <SelectTrigger className="w-20">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="AM">AM</SelectItem>
+                        <SelectItem value="PM">PM</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Select your preferred inspection time
+                  </p>
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => handleConfirmInspectionFinal()}>Skip</Button>

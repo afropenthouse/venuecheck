@@ -46,7 +46,7 @@ const Index = () => {
               Find a venue <em className="italic text-primary-glow">worth</em> remembering.
             </h1>
             <p className="mt-5 max-w-lg text-base sm:text-lg text-muted-foreground text-balance">
-              Venue Flow lets hosts manage availability and lets guests check open dates and book inspections — beautifully, in seconds.
+              Venue Check lets hosts manage availability and lets guests check open dates and book inspections — beautifully, in seconds.
             </p>
 
             <div className="mt-8 flex max-w-md items-center gap-2 rounded-full border border-border bg-card p-1.5 shadow-soft">
