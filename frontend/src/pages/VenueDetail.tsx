@@ -1,16 +1,20 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MapPin, Users, Calendar, Star, ArrowLeft, Share2, Heart, Check } from "lucide-react";
+import { MapPin, Users, Calendar as CalendarIcon, Star, ArrowLeft, Share2, Heart, Check, Clock, CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { FullPageEnhancedLoading } from "@/components/ui/EnhancedLoading";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type Step = "browse" | "booking" | "inspection" | "done";
