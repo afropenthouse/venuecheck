@@ -37,19 +37,26 @@ const Index = () => {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="container grid gap-12 py-16 md:grid-cols-2 md:items-center md:py-24">
+        <div className="container grid gap-12 py-8 md:grid-cols-2 md:items-center md:py-12">
           <div className="animate-fade-in">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs font-medium text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Bookings, inspections, all in one flow
             </span>
             <h1 className="mt-5 font-display text-3xl font-semibold leading-[1.05] text-balance sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-              Share your venue <em className="italic text-primary-glow">availability</em> easily.
+              Turn venue inquiries <em className="italic text-primary-glow">into</em> more bookings.
             </h1>
             <p className="mt-5 max-w-lg text-base sm:text-lg text-muted-foreground text-balance">
-              Venuecheck allows event centers allow guest share their availability with potential customers, and schedule inspection, easily and seamlessly.
+              Venuecheck lets customers check availability and schedule inspections instantly with one link.
             </p>
 
-            
+            <div className="mt-8">
+              <Link to="/auth">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary-glow px-8 py-3">
+                  Create Venue Link
+                </Button>
+              </Link>
+            </div>
+
             <div className="mt-10 flex items-center gap-8 text-sm text-muted-foreground">
               <div><span className="font-display text-2xl font-semibold text-foreground">2.4k+</span><div>Venues hosted</div></div>
               <div className="h-8 w-px bg-border" />
