@@ -43,23 +43,13 @@ const Index = () => {
               <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Bookings, inspections, all in one flow
             </span>
             <h1 className="mt-5 font-display text-3xl font-semibold leading-[1.05] text-balance sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-              Find a venue <em className="italic text-primary-glow">worth</em> remembering.
+              Share your venue <em className="italic text-primary-glow">availability</em> easily.
             </h1>
             <p className="mt-5 max-w-lg text-base sm:text-lg text-muted-foreground text-balance">
-              Venuecheck is a venue booking platform where hosts manage availability and guests book inspections, seamlessly and efficiently.
+              Venuecheck allows event centers allow guest share their availability with potential customers, and schedule inspection, easily and seamlessly.
             </p>
 
-            <div className="mt-8 flex max-w-md items-center gap-2 rounded-full border border-border bg-card p-1.5 shadow-soft">
-              <Search className="ml-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by city or venue name…"
-                className="border-0 bg-transparent shadow-none focus-visible:ring-0"
-              />
-              <Button size="sm" className="rounded-full bg-primary px-5 text-primary-foreground hover:bg-primary-glow">
-                Search
-              </Button>
-            </div>
-
+            
             <div className="mt-10 flex items-center gap-8 text-sm text-muted-foreground">
               <div><span className="font-display text-2xl font-semibold text-foreground">2.4k+</span><div>Venues hosted</div></div>
               <div className="h-8 w-px bg-border" />
