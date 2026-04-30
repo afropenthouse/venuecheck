@@ -7,7 +7,7 @@ export const SiteHeader = () => {
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-gradient-hero shadow-glow" />
-          <span className="font-display text-xl font-semibold tracking-tight">Venue Check</span>
+          <span className="font-display text-xl font-semibold tracking-tight">Venuecheck</span>
         </Link>
         <div className="flex items-center gap-2">
           <Link to="/auth">

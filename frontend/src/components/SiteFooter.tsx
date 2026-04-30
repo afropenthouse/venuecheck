@@ -5,7 +5,7 @@ export const SiteFooter = () => {
         <div>
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-hero" />
-            <span className="font-display text-lg font-semibold">Venue Check</span>
+            <span className="font-display text-lg font-semibold">Venuecheck</span>
           </div>
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">
             The graceful way to host, share, and book inspection-ready venues.
@@ -38,7 +38,7 @@ export const SiteFooter = () => {
         </div>
       </div>
       <div className="border-t border-border py-4">
-        <p className="container text-xs text-muted-foreground">© {new Date().getFullYear()} Venue Check. Crafted with care.</p>
+        <p className="container text-xs text-muted-foreground">© {new Date().getFullYear()} Venuecheck. Crafted with care.</p>
       </div>
     </footer>
   );

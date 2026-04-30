@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Calendar as DateCalendar } from "@/components/ui/calendar";
+import { DashboardEnhancedLoading } from "@/components/ui/EnhancedLoading";
 
 type Venue = {
   id: string; name: string; location: string; maxGuests: number;
@@ -184,19 +185,7 @@ const Venues = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative h-12 w-12">
-            <div className="absolute inset-0 animate-pulse rounded-full bg-primary/20"></div>
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-          </div>
-          <p className="text-sm text-muted-foreground animate-fade-in">Loading your venues...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <DashboardEnhancedLoading />;
 
   return (
     <div className="space-y-8 animate-fade-in">

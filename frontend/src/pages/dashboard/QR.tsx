@@ -3,9 +3,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Download, Copy, ExternalLink, RefreshCw, Star } from 'lucide-react';
+import { Download, Copy, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
+import { DashboardEnhancedLoading } from "@/components/ui/EnhancedLoading";
 
 interface Venue {
   id: string;
@@ -19,24 +20,11 @@ interface Venue {
   unavailableDates: string[];
 }
 
-interface FeedbackItem {
-  id: string;
-  rating: number;
-  comment?: string;
-  guestName: string;
-  guestEmail?: string;
-  createdAt: string;
-  venue: {
-    name: string;
-    location: string;
-  };
-}
 
 const QR: React.FC = () => {
   const [venues, setVenues] = useState<Venue[]>([]);
   const [selectedVenueId, setSelectedVenueId] = useState<string>('');
   const [loading, setLoading] = useState(true);
-  const [feedbackData, setFeedbackData] = useState<FeedbackItem[]>([]);
 
   useEffect(() => {
     loadVenues();
@@ -48,11 +36,6 @@ const QR: React.FC = () => {
     }
   }, [venues, selectedVenueId]);
 
-  useEffect(() => {
-    if (selectedVenueId) {
-      loadFeedback();
-    }
-  }, [selectedVenueId]);
 
   const loadVenues = async () => {
     try {
@@ -66,53 +49,75 @@ const QR: React.FC = () => {
     }
   };
 
-  const loadFeedback = async () => {
-    if (!selectedVenueId) return;
-    
-    try {
-      const data = await api.feedback.getHostFeedback();
-      const venueFeedback = data.filter((f: any) => f.venueId === selectedVenueId);
-      setFeedbackData(venueFeedback);
-    } catch (err) {
-      console.error("Failed to load feedback");
-      setFeedbackData([]);
-    }
-  };
-
-  const refreshFeedback = async () => {
-    toast.loading("Refreshing feedback...");
-    await loadFeedback();
-    toast.dismiss();
-    toast.success("Feedback updated!");
-  };
 
   const selectedVenue = venues.find(v => v.id === selectedVenueId);
   const qrUrl = selectedVenue ? `${window.location.origin}/feedback/${selectedVenue.id}` : '';
 
   const downloadQRCode = () => {
     const svg = document.getElementById("venue-qr-code");
-    if (!svg) return;
+    if (!svg) {
+      toast.error("QR code not found");
+      return;
+    }
 
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.onload = () => {
-      canvas.width = 400;
-      canvas.height = 400;
-      if (ctx) {
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-      }
-      const pngFile = canvas.toDataURL("image/png");
-      const downloadLink = document.createElement("a");
-      downloadLink.download = `feedback-qr-${selectedVenue?.name || 'venue'}.png`;
-      downloadLink.href = pngFile;
-      downloadLink.click();
-      toast.success("QR code downloaded!");
-    };
-    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    try {
+      // Get SVG data with proper namespace
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const svgUrl = URL.createObjectURL(svgBlob);
+      
+      // Create image from SVG
+      const img = new Image();
+      img.onload = () => {
+        // Create canvas with proper dimensions
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const size = 400;
+        canvas.width = size;
+        canvas.height = size;
+        
+        if (ctx) {
+          // Fill white background
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, size, size);
+          
+          // Draw the QR code centered and scaled
+          const qrSize = 300; // Original QR size from component
+          const scale = size / qrSize;
+          const offset = (size - qrSize * scale) / 2;
+          ctx.drawImage(img, offset, offset, qrSize * scale, qrSize * scale);
+          
+          // Convert to PNG and download
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const downloadLink = document.createElement("a");
+              const fileName = `feedback-qr-${selectedVenue?.name?.replace(/[^a-z0-9]/gi, '_') || 'venue'}.png`;
+              downloadLink.download = fileName;
+              downloadLink.href = url;
+              document.body.appendChild(downloadLink);
+              downloadLink.click();
+              document.body.removeChild(downloadLink);
+              URL.revokeObjectURL(url);
+              toast.success("QR code downloaded successfully!");
+            } else {
+              toast.error("Failed to generate QR code image");
+            }
+            URL.revokeObjectURL(svgUrl);
+          }, "image/png", 1.0);
+        }
+      };
+      
+      img.onerror = () => {
+        toast.error("Failed to load QR code for download");
+        URL.revokeObjectURL(svgUrl);
+      };
+      
+      img.src = svgUrl;
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("Failed to download QR code");
+    }
   };
 
   const copyLink = () => {
@@ -122,15 +127,7 @@ const QR: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <DashboardEnhancedLoading />;
 
   if (venues.length === 0) {
     return (
@@ -143,16 +140,16 @@ const QR: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div className="flex-1">
           <h2 className="text-2xl font-bold text-gray-900">QR Code for Feedback & Complaints</h2>
           <p className="text-gray-600">Place this QR code at your venue to collect guest feedback & reviews</p>
         </div>
-        <div className="w-full md:w-64 flex flex-row items-center gap-2">
+        <div className="w-full lg:w-80 flex flex-col sm:flex-row items-start sm:items-center gap-2">
           <span className="text-sm text-gray-600 whitespace-nowrap">Select venue</span>
           <Select value={selectedVenueId} onValueChange={setSelectedVenueId}>
-            <SelectTrigger>
+            <SelectTrigger className="flex-1">
               <SelectValue placeholder="Select venue" />
             </SelectTrigger>
             <SelectContent>
@@ -168,32 +165,32 @@ const QR: React.FC = () => {
 
       {selectedVenue && (
         <Card className="border-0 shadow-lg overflow-hidden">
-          <CardContent className="p-8 flex flex-col items-center justify-center space-y-8">
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+          <CardContent className="p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center space-y-6">
+            <div className="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
               <QRCodeSVG
                 id="venue-qr-code"
                 value={qrUrl}
-                size={300}
+                size={Math.min(300, window.innerWidth < 640 ? 200 : window.innerWidth < 1024 ? 250 : 300)}
                 level={"H"}
                 includeMargin={true}
               />
             </div>
             
-            <div className="text-center space-y-2">
-              <h3 className="text-xl font-semibold">{selectedVenue.name}</h3>
-              <p className="text-gray-500 text-sm break-all">{qrUrl}</p>
+            <div className="text-center space-y-2 w-full max-w-md">
+              <h3 className="text-lg sm:text-xl font-semibold">{selectedVenue.name}</h3>
+              <p className="text-gray-500 text-xs sm:text-sm break-all px-2">{qrUrl}</p>
             </div>
 
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button onClick={downloadQRCode} className="bg-primary hover:bg-primary-glow">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-md">
+              <Button onClick={downloadQRCode} className="bg-primary hover:bg-primary-glow flex-1">
                 <Download className="w-4 h-4 mr-2" />
                 Download QR Code
               </Button>
-              <Button variant="outline" onClick={copyLink}>
+              <Button variant="outline" onClick={copyLink} className="flex-1">
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Link
               </Button>
-              <Button variant="ghost" onClick={() => window.open(qrUrl, '_blank')}>
+              <Button variant="ghost" onClick={() => window.open(qrUrl, '_blank')} className="flex-1">
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Preview
               </Button>
@@ -201,52 +198,6 @@ const QR: React.FC = () => {
           </CardContent>
         </Card>
       )}
-
-      {/* Recent Feedback Section */}
-      <Card className="border-0 shadow-lg">
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">
-              Recent Feedback {selectedVenue && `- ${selectedVenue.name}`}
-            </h3>
-            <Button onClick={refreshFeedback} variant="outline" size="sm" className="gap-2">
-              <RefreshCw className="h-4 w-4" /> Refresh
-            </Button>
-          </div>
-          
-          {feedbackData.length === 0 ? (
-            <div className="text-center py-8">
-              <Star className="mx-auto h-8 w-8 text-muted-foreground mb-3" />
-              <p className="text-muted-foreground">No feedback yet. Share the QR code to start collecting reviews!</p>
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {feedbackData.map((feedback) => (
-                <div key={feedback.id} className="p-4 rounded-xl bg-secondary/30">
-                  <div className="flex items-center gap-1 mb-2">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <Star 
-                        key={j} 
-                        className={`h-4 w-4 ${
-                          j < feedback.rating 
-                            ? "fill-accent text-accent" 
-                            : "text-muted-foreground"
-                        }`} 
-                      />
-                    ))}
-                  </div>
-                  {feedback.comment && (
-                    <p className="text-sm mb-2">{feedback.comment}</p>
-                  )}
-                  <p className="text-xs text-muted-foreground">
-                    {feedback.guestName} · {new Date(feedback.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 };

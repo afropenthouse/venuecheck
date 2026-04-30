@@ -252,5 +252,65 @@ export const api = {
       if (!res.ok) throw new Error('Failed to fetch host feedback');
       return res.json();
     }
+  },
+  payments: {
+    initialize: async (months: number, email: string, callback_url?: string) => {
+      console.log('API: Initialize payment for', months, 'months');
+      const token = getToken();
+      const res = await fetch(`${API_URL}/payments/initialize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ months, email, callback_url })
+      });
+      if (!res.ok) {
+        console.error('Payment initialization failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to initialize payment');
+      }
+      return res.json();
+    },
+    verify: async (reference: string) => {
+      console.log('API: Verify payment with reference:', reference);
+      const token = getToken();
+      const res = await fetch(`${API_URL}/payments/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ reference })
+      });
+      if (!res.ok) {
+        console.error('Payment verification failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to verify payment');
+      }
+      return res.json();
+    },
+    getSubscription: async (userId: string) => {
+      console.log('API: Get subscription for user:', userId);
+      const token = getToken();
+      const res = await fetch(`${API_URL}/payments/subscription/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) {
+        console.error('Get subscription failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to get subscription');
+      }
+      return res.json();
+    },
+    manualActivate: async (userId: string, months: number, activatedBy: string) => {
+      console.log('API: Manual activation for user:', userId);
+      const token = getToken();
+      const res = await fetch(`${API_URL}/payments/manual-activate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ userId, months, activatedBy })
+      });
+      if (!res.ok) {
+        console.error('Manual activation failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to activate subscription');
+      }
+      return res.json();
+    }
   }
 };

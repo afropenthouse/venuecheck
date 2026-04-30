@@ -8,13 +8,15 @@ import NotFound from "./pages/NotFound.tsx";
 import VenueDetail from "./pages/VenueDetail.tsx";
 import Feedback from "./pages/Feedback.tsx";
 import Auth from "./pages/Auth.tsx";
+import PaymentVerify from "./pages/PaymentVerify.tsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.tsx";
-import Overview from "./pages/dashboard/Overview.tsx";
-import Venues from "./pages/dashboard/Venues.tsx";
-import Inspections from "./pages/dashboard/Inspections.tsx";
-import QR from "./pages/dashboard/QR.tsx";
-import DashboardFeedback from "./pages/dashboard/Feedback.tsx";
-import Settings from "./pages/dashboard/Settings.tsx";
+import Overview from "./pages/dashboard/Overview";
+import Venues from "./pages/dashboard/Venues";
+import Inspections from "./pages/dashboard/Inspections";
+import QR from "./pages/dashboard/QR";
+import DashboardFeedback from "./pages/dashboard/Feedback";
+import Settings from "./pages/dashboard/Settings";
+import SubscriptionManagement from "./pages/dashboard/SubscriptionManagement.tsx";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,7 @@ const App = () => (
           <Route path="/venue/:id" element={<VenueDetail />} />
           <Route path="/feedback/:venueId" element={<Feedback />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
             <Route path="venues" element={<Venues />} />
@@ -36,6 +39,7 @@ const App = () => (
             <Route path="qr" element={<QR />} />
             <Route path="feedback" element={<DashboardFeedback />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="subscription" element={<SubscriptionManagement />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

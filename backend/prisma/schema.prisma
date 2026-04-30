@@ -14,6 +14,16 @@ model User {
   name          String?
   emailVerified Boolean   @default(false)
   
+  // Subscription fields
+  subscriptionStatus    SubscriptionStatus @default(FREE)
+  subscriptionStartDate DateTime?
+  subscriptionEndDate   DateTime?
+  subscriptionDuration  Int? // Number of months (6-12)
+  paymentMethod         String? // 'paystack' or 'manual'
+  paystackReference     String? // Paystack transaction reference
+  manuallyActivated     Boolean @default(false)
+  activatedBy           String? // Admin user ID who manually activated
+  
   venues        Venue[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -60,6 +70,13 @@ enum BookingStatus {
   PENDING
   APPROVED
   DECLINED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  FREE
+  ACTIVE
+  EXPIRED
   CANCELLED
 }
 

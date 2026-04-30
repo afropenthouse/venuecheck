@@ -30,66 +30,46 @@ const sendApprovalEmail = async (email, guestName, venueName, bookingDate, inspe
     
     const currentYear = new Date().getFullYear();
     const mailOptions = {
-      from: `"Venue Check" <${process.env.SMTP_USER}>`,
+      from: `"Venuecheck" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: '🎉 Your Venue Inspection Has Been Approved!',
+      subject: 'Inspection Request Approved',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
-            <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">Venue Check</h1>
-            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 80px; height: 80px; margin: 20px auto; display: flex; align-items: center; justify-content: center;">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-            </div>
-            <h2 style="color: white; margin: 0; font-size: 24px;">Request Approved!</h2>
+            <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">Venuecheck</h1>
+            <h2 style="color: white; margin: 20px 0 0 0; font-size: 24px;">Inspection Approved</h2>
             <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Your venue inspection has been confirmed</p>
           </div>
           
           <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Hello ${guestName},</h3>
+            <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Dear ${guestName},</h3>
             <p style="color: #666; margin: 0 0 25px 0; line-height: 1.6; font-size: 16px;">
-              Great news! Your venue inspection for <strong>${venueName}</strong> has been approved by the venue host. You're all set for your visit.
+              Your inspection request for <strong>${venueName}</strong> has been approved by the venue host. Your visit has been scheduled.
             </p>
             
             <div style="background: white; border: 2px solid #667eea; padding: 25px; border-radius: 10px; margin: 25px 0;">
-              <h4 style="color: #667eea; margin: 0 0 15px 0; font-size: 18px; text-align: center;">📅 Inspection Details</h4>
+              <h4 style="color: #667eea; margin: 0 0 20px 0; font-size: 18px; text-align: center;">Inspection Details</h4>
               <div style="space-y: 15px;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">📍</div>
-                  <div>
-                    <strong style="color: #333;">Venue:</strong> ${venueName}
-                  </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">📅</div>
-                  <div>
-                    <strong style="color: #333;">Requested Date:</strong> ${bookingDate}
-                  </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">⏰</div>
-                  <div>
-                    <strong style="color: #333;">Inspection Date:</strong> ${inspectionDate}
-                  </div>
-                </div>
+                <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Venue:</strong> ${venueName}</p>
+                <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Requested Date:</strong> ${bookingDate}</p>
+                <p style="margin: 0; font-size: 16px;"><strong>Inspection Date:</strong> ${inspectionDate}</p>
               </div>
             </div>
             
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center; margin: 25px 0;">
               <p style="color: white; margin: 0; font-size: 16px; font-weight: 500;">
-                🎉 We're excited to have you visit! Make sure to arrive on time for your inspection.
+                Please arrive on time for your scheduled inspection.
               </p>
             </div>
             
             <p style="color: #666; margin: 25px 0 0 0; line-height: 1.6; font-size: 14px;">
-              If you have any questions or need to reschedule, please don't hesitate to contact us or the venue host directly.
+              Should you need to reschedule or have any questions, please contact us or the venue host directly.
             </p>
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="margin: 0 0 10px 0;">This is an automated notification from Venue Check</p>
-            <p style="margin: 0;">© ${currentYear} Venue Check. All rights reserved.</p>
+            <p style="margin: 0 0 10px 0;">This is an automated notification from Venuecheck</p>
+            <p style="margin: 0;">&copy; ${currentYear} Venuecheck. All rights reserved.</p>
           </div>
         </div>
       `
@@ -152,41 +132,41 @@ router.post('/', async (req, res) => {
       if (host?.email) {
         const transporter = createTransporter();
         await transporter.sendMail({
-          from: `"Venue Check" <${process.env.SMTP_USER}>`,
+          from: `"Venuecheck" <${process.env.SMTP_USER}>`,
           to: host.email,
-          subject: '🔔 New Inspection Request',
+          subject: 'New Inspection Request',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
               <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
-                <h1 style="color: white; margin: 0; font-size: 28px;">Venue Check</h1>
+                <h1 style="color: white; margin: 0; font-size: 28px;">Venuecheck</h1>
                 <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">New Inspection Request</p>
               </div>
               
               <div style="background: #f8f9fa; padding: 30px; border-radius: 10px;">
-                <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Hello Host,</h3>
+                <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Dear Host,</h3>
                 <p style="color: #666; margin: 0 0 25px 0; line-height: 1.6;">
-                  You have a new inspection request for <strong>${venue.name}</strong> from <strong>${guestName}</strong>.
+                  You have received a new inspection request for <strong>${venue.name}</strong> from <strong>${guestName}</strong>.
                 </p>
                 
                 <div style="background: white; border: 2px solid #667eea; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                  <h4 style="color: #667eea; margin: 0 0 15px 0;">📋 Inspection Details</h4>
+                  <h4 style="color: #667eea; margin: 0 0 15px 0;">Request Details</h4>
                   <div style="space-y: 10px;">
-                    <p style="margin: 0;"><strong>Guest:</strong> ${guestName}</p>
+                    <p style="margin: 0;"><strong>Guest Name:</strong> ${guestName}</p>
                     <p style="margin: 0;"><strong>Email:</strong> ${guestEmail}</p>
                     <p style="margin: 0;"><strong>Phone:</strong> ${guestPhone}</p>
-                    <p style="margin: 0;"><strong>Guests:</strong> ${guests}</p>
+                    <p style="margin: 0;"><strong>Number of Guests:</strong> ${guests}</p>
                     <p style="margin: 0;"><strong>Requested Date:</strong> ${format(new Date(bookingDate), "MMM d, yyyy h:mm a")}</p>
-                    ${inspectionDate ? `<p style="margin: 0;"><strong>Inspection Date:</strong> ${format(new Date(inspectionDate), "MMM d, yyyy h:mm a")}</p>` : ''}
+                    ${inspectionDate ? `<p style="margin: 0;"><strong>Preferred Inspection Date:</strong> ${format(new Date(inspectionDate), "MMM d, yyyy h:mm a")}</p>` : ''}
                   </div>
                 </div>
                 
                 <p style="color: #666; margin: 25px 0 0 0; font-size: 14px;">
-                  Please review this inspection request and approve or decline it in your dashboard.
+                  Please review this request in your dashboard and approve or decline at your earliest convenience.
                 </p>
               </div>
               
               <div style="text-align: center; color: #999; font-size: 12px; padding-top: 20px; border-top: 1px solid #eee;">
-                <p>This is an automated notification from Venue Check</p>
+                <p>This is an automated notification from Venuecheck</p>
               </div>
             </div>
           `

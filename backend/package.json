@@ -1,7 +1,7 @@
 {
   "name": "venue-connect-backend",
   "version": "1.0.0",
-  "description": "Backend API for Venue Check",
+  "description": "Backend API for Venuecheck",
   "main": "src/index.js",
   "scripts": {
     "build": "echo 'No build step needed'",
@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "nanoid": "^5.1.9",
     "nodemailer": "^6.10.1",
+    "paystack": "^2.0.1",
     "qrcode": "^1.5.4",
     "zod": "^3.22.4"
   },

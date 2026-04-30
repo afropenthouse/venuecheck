@@ -46,7 +46,7 @@ const Index = () => {
               Find a venue <em className="italic text-primary-glow">worth</em> remembering.
             </h1>
             <p className="mt-5 max-w-lg text-base sm:text-lg text-muted-foreground text-balance">
-              Venue Check lets hosts manage availability and lets guests check open dates and book inspections — beautifully, in seconds.
+              Venuecheck is a venue booking platform where hosts manage availability and guests book inspections, seamlessly and efficiently.
             </p>
 
             <div className="mt-8 flex max-w-md items-center gap-2 rounded-full border border-border bg-card p-1.5 shadow-soft">
@@ -105,9 +105,9 @@ const Index = () => {
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {[
-              { icon: Share2, title: "Share a link", body: "Hosts publish a venue and share a beautiful public page with one tap." },
-              { icon: CalendarCheck, title: "Check availability", body: "Guests pick from open dates in a fluid calendar — never double-booked." },
-              { icon: QrCode, title: "Inspect & feedback", body: "Schedule on-site inspections and collect post-event ratings via QR." },
+              { icon: Share2, title: "Share a link", body: "Create your venue profile and instantly share a professional listing with potential guests." },
+              { icon: CalendarCheck, title: "Check availability", body: "Browse real-time availability and book inspection slots that fit your schedule perfectly." },
+              { icon: QrCode, title: "Inspect & feedback", body: "Conduct thorough venue inspections and provide valuable feedback through QR code check-ins." },
             ].map((s, i) => (
               <div key={i} className="rounded-2xl border border-border bg-card p-7 shadow-soft transition-smooth hover:shadow-elegant">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-hero text-primary-foreground shadow-glow">

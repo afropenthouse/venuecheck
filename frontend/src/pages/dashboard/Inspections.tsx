@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DashboardEnhancedLoading } from "@/components/ui/EnhancedLoading";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -81,11 +82,7 @@ const Inspections = () => {
     }
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-screen p-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    </div>
-  );
+  if (loading) return <DashboardEnhancedLoading />;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -233,8 +230,12 @@ const Inspections = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold text-lg text-foreground truncate">{booking.guestName}</h3>
-                            <Badge className={`${getStatusColor(booking.status)} text-xs font-medium px-3 py-1 ${
-                              booking.status === "PENDING" ? "animate-pulse shadow-sm" : ""
+                            <Badge className={`${getStatusColor(booking.status)} text-xs font-medium px-3 py-1 transition-all duration-200 cursor-default ${
+                              booking.status === "PENDING" 
+                                ? "shadow-sm hover:bg-yellow-200 hover:text-yellow-900 hover:shadow-md transform hover:scale-105" 
+                                : booking.status === "APPROVED"
+                                ? "hover:bg-green-200 hover:text-green-900 hover:shadow-md transform hover:scale-105"
+                                : ""
                             }`}>
                               {booking.status}
                             </Badge>

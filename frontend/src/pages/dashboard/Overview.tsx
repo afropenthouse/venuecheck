@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Building2, CalendarCheck, Inbox, TrendingUp, Activity, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { DashboardEnhancedLoading } from "@/components/ui/EnhancedLoading";
 
 type Stats = { venues: number; pending: number; approved: number };
 type Recent = { name: string; venue: string; action: string; when: string }[];
@@ -46,19 +47,7 @@ const Overview = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative h-12 w-12">
-            <div className="absolute inset-0 animate-pulse rounded-full bg-primary/20"></div>
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-          </div>
-          <p className="text-sm text-muted-foreground animate-fade-in">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <DashboardEnhancedLoading />;
 
   const statCards = [
     { 

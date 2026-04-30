@@ -25,6 +25,8 @@ const bookingRoutes = require('./routes/bookings');
 const settingsRoutes = require('./routes/settings');
 const uploadRoutes = require('./routes/upload');
 const feedbackRoutes = require('./routes/feedback');
+const paymentRoutes = require('./routes/payments');
+const adminRoutes = require('./routes/admin');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
@@ -32,6 +34,8 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

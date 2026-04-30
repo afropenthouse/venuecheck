@@ -105,29 +105,32 @@ const sendVerificationEmail = async (email, code) => {
     
     const currentYear = new Date().getFullYear();
     const mailOptions = {
-      from: `"Venue Check" <${process.env.SMTP_USER}>`,
+      from: `"Venuecheck" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'Verify your Venue Check account',
+      subject: 'Email Verification Required',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">Venue Check</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Verify your email address</p>
+            <h1 style="color: white; margin: 0; font-size: 28px;">Venuecheck</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Email Verification</p>
           </div>
           
           <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 20px;">
-            <h2 style="color: #333; margin: 0 0 20px 0;">Your verification code is:</h2>
+            <h2 style="color: #333; margin: 0 0 20px 0;">Verification Code</h2>
+            <p style="color: #666; margin: 0 0 20px 0; line-height: 1.5;">
+              Please use the following verification code to complete your registration:
+            </p>
             <div style="background: white; border: 2px solid #e9ecef; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
               <span style="font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 3px;">${code}</span>
             </div>
             <p style="color: #666; margin: 20px 0 0 0; line-height: 1.5;">
-              This code will expire in 10 minutes. Enter it in the verification screen to complete your registration.
+              This code will expire in 10 minutes for security purposes.
             </p>
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px;">
-            <p>If you didn't request this code, please ignore this email.</p>
-            <p>© ${currentYear} Venue Check. All rights reserved.</p>
+            <p>If you did not request this verification, please disregard this email.</p>
+            <p>© ${currentYear} Venuecheck. All rights reserved.</p>
           </div>
         </div>
       `
@@ -149,66 +152,46 @@ const sendApprovalEmail = async (email, guestName, venueName, bookingDate, inspe
     
     const currentYear = new Date().getFullYear();
     const mailOptions = {
-      from: `"Venue Check" <${process.env.SMTP_USER}>`,
+      from: `"Venuecheck" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: '🎉 Your Inspection Request Has Been Approved!',
+      subject: 'Inspection Request Approved',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
-            <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">Venue Check</h1>
-            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 80px; height: 80px; margin: 20px auto; display: flex; align-items: center; justify-content: center;">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-            </div>
-            <h2 style="color: white; margin: 0; font-size: 24px;">Request Approved!</h2>
+            <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">Venuecheck</h1>
+            <h2 style="color: white; margin: 20px 0 0 0; font-size: 24px;">Inspection Approved</h2>
             <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Your venue inspection has been confirmed</p>
           </div>
           
           <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Hello ${guestName},</h3>
+            <h3 style="color: #333; margin: 0 0 20px 0; font-size: 20px;">Dear ${guestName},</h3>
             <p style="color: #666; margin: 0 0 25px 0; line-height: 1.6; font-size: 16px;">
-              Great news! Your inspection request for <strong>${venueName}</strong> has been approved by the venue host. You're all set for your visit.
+              Your inspection request for <strong>${venueName}</strong> has been approved by the venue host. Your visit has been scheduled.
             </p>
             
             <div style="background: white; border: 2px solid #667eea; padding: 25px; border-radius: 10px; margin: 25px 0;">
-              <h4 style="color: #667eea; margin: 0 0 15px 0; font-size: 18px; text-align: center;">📅 Inspection Details</h4>
+              <h4 style="color: #667eea; margin: 0 0 20px 0; font-size: 18px; text-align: center;">Inspection Details</h4>
               <div style="space-y: 15px;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">📍</div>
-                  <div>
-                    <strong style="color: #333;">Venue:</strong> ${venueName}
-                  </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">📅</div>
-                  <div>
-                    <strong style="color: #333;">Booking Date:</strong> ${bookingDate}
-                  </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">⏰</div>
-                  <div>
-                    <strong style="color: #333;">Inspection Date:</strong> ${inspectionDate}
-                  </div>
-                </div>
+                <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Venue:</strong> ${venueName}</p>
+                <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Requested Date:</strong> ${bookingDate}</p>
+                <p style="margin: 0; font-size: 16px;"><strong>Inspection Date:</strong> ${inspectionDate}</p>
               </div>
             </div>
             
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center; margin: 25px 0;">
               <p style="color: white; margin: 0; font-size: 16px; font-weight: 500;">
-                🎉 We're excited to have you visit! Make sure to arrive on time for your inspection.
+                Please arrive on time for your scheduled inspection.
               </p>
             </div>
             
             <p style="color: #666; margin: 25px 0 0 0; line-height: 1.6; font-size: 14px;">
-              If you have any questions or need to reschedule, please don't hesitate to contact us or the venue host directly.
+              Should you need to reschedule or have any questions, please contact us or the venue host directly.
             </p>
           </div>
           
           <div style="text-align: center; color: #999; font-size: 12px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="margin: 0 0 10px 0;">This is an automated notification from Venue Check</p>
-            <p style="margin: 0;">© ${currentYear} Venue Check. All rights reserved.</p>
+            <p style="margin: 0 0 10px 0;">This is an automated notification from Venuecheck</p>
+            <p style="margin: 0;">  ${currentYear} Venuecheck. All rights reserved.</p>
           </div>
         </div>
       `

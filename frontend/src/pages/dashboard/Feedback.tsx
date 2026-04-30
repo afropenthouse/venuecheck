@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DashboardEnhancedLoading } from "@/components/ui/EnhancedLoading";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -79,15 +80,7 @@ const Feedback = () => {
     toast.success("Feedback updated!");
   };
 
-  if (loading) {
-    return (
-      <div className="space-y-8 animate-fade-in">
-        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <DashboardEnhancedLoading />;
 
   // Calculate statistics
   const totalFeedback = feedbackData.length;

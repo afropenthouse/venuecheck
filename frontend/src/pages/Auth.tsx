@@ -36,7 +36,23 @@ const Auth = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         toast.success("Welcome back!");
-        navigate("/dashboard");
+        
+        // Check subscription status
+        try {
+          const subscriptionData = await api.payments.getSubscription(user.id);
+          const subscription = subscriptionData.subscription;
+          
+          // Store user data in localStorage
+          localStorage.setItem("user", JSON.stringify(user));
+          
+          console.log('Auth: Subscription status checked:', subscription.status);
+          navigate("/dashboard");
+        } catch (error) {
+          console.error('Auth: Subscription check failed:', error);
+          // If subscription check fails, default to dashboard
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/dashboard");
+        }
       }
     } catch (err: any) {
       toast.error(err.message || "An error occurred");
@@ -76,7 +92,7 @@ const Auth = () => {
         <div className="flex h-full min-h-screen flex-col justify-between p-10 text-primary-foreground">
           <Link to="/" className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-accent" />
-            <span className="font-display text-xl font-semibold">Venue Check</span>
+            <span className="font-display text-xl font-semibold">Venuecheck</span>
           </Link>
           <div className="space-y-6">
             <div className="space-y-4">
@@ -185,7 +201,7 @@ const Auth = () => {
               
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">
-                  {isRegister ? "Already have an account?" : "New to Venue Check?"}{" "}
+                  {isRegister ? "Already have an account?" : "New to Venuecheck?"}{" "}
                   <button 
                     type="button"
                     onClick={() => {
