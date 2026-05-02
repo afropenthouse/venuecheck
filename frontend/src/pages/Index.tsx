@@ -40,19 +40,19 @@ const Index = () => {
         <div className="container grid gap-12 py-8 md:grid-cols-2 md:items-center md:py-12">
           <div className="animate-fade-in">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs font-medium text-muted-foreground">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Bookings, inspections, all in one flow
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Stop answering "Is this date available?"
             </span>
             <h1 className="mt-5 font-display text-3xl font-semibold leading-[1.05] text-balance sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               Turn venue inquiries <em className="italic text-primary-glow">into</em> more bookings.
             </h1>
             <p className="mt-5 max-w-lg text-base sm:text-lg text-muted-foreground text-balance">
-              Venuecheck lets customers check availability and schedule inspections instantly with one link.
+              By letting customers check availability and schedule inspections instantly.
             </p>
 
             <div className="mt-8">
               <Link to="/auth">
                 <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary-glow px-8 py-3">
-                  Create Venue Link
+                  Get your VenueCheck link
                 </Button>
               </Link>
             </div>
