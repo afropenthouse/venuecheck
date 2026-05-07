@@ -92,9 +92,9 @@ const DashboardLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className={`flex min-h-screen w-full bg-secondary/30 ${subscriptionStatus !== 'ACTIVE' ? 'relative' : ''}`}>
-        <DashboardSidebar />
-        <div className={`flex flex-1 flex-col ${subscriptionStatus !== 'ACTIVE' ? 'blur-sm opacity-60 pointer-events-none' : ''}`}>
+<div className={`flex min-h-screen w-full bg-secondary/30 relative`}>
+         <DashboardSidebar />
+         <div className={`flex flex-1 flex-col`}>
           <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md">
             <SidebarTrigger />
             <div className="flex-1" />
@@ -102,19 +102,20 @@ const DashboardLayout = () => {
               Welcome, {userName}
             </div>
           </header>
-          <main className="flex-1 overflow-x-hidden p-6 md:p-8">
-            <Outlet />
-          </main>
-        </div>
-        
-        {/* Paywall Modal Overlay */}
-        {subscriptionStatus !== 'ACTIVE' && user && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-            <PaywallModal user={user} onSuccess={handlePaymentSuccess} />
-          </div>
-        )}
-        
-              </div>
+<main className="flex-1 overflow-x-hidden p-6 md:p-8">
+             <Outlet />
+           </main>
+         </div>
+         
+         {/* Paywall Modal Overlay - COMMENTED OUT
+         {subscriptionStatus !== 'ACTIVE' && user && (
+           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+             <PaywallModal user={user} onSuccess={handlePaymentSuccess} />
+           </div>
+         )}
+         */}
+         
+               </div>
     </SidebarProvider>
   );
 };
