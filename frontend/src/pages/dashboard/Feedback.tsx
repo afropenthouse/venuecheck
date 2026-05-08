@@ -97,8 +97,8 @@ const Feedback = () => {
     <div className="space-y-8 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-4xl font-semibold">Feedback</h1>
-          <p className="text-sm text-muted-foreground">View and manage guest feedback for all your venues</p>
+          <h1 className="font-display text-4xl font-semibold">Feedback & Complaints</h1>
+          <p className="text-sm text-muted-foreground">View and manage guest feedback and complaints for all your venues</p>
         </div>
         <Button onClick={refreshFeedback} variant="outline" size="sm" className="gap-2">
           <RefreshCw className="h-4 w-4" /> Refresh

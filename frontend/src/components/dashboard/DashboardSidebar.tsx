@@ -18,7 +18,7 @@ const items = [
   { title: "Venues", url: "/dashboard/venues", icon: Building2 },
   { title: "Inspections", url: "/dashboard/inspections", icon: Inbox },
   { title: "QR Code", url: "/dashboard/qr", icon: QrCode },
-  { title: "Feedback", url: "/dashboard/feedback", icon: MessageSquare },
+  { title: "Feedback & Complaints", url: "/dashboard/feedback", icon: MessageSquare },
   { title: "Subscription", url: "/dashboard/subscription", icon: CreditCard },
 ];
 
