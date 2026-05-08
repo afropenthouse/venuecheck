@@ -1,4 +1,4 @@
-import { LayoutDashboard, Building2, QrCode, Settings, Inbox, MessageSquare, CreditCard, LogOut } from "lucide-react";
+import { LayoutDashboard, Building2, QrCode, Inbox, MessageSquare, CreditCard, LogOut } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -20,7 +20,6 @@ const items = [
   { title: "QR Code", url: "/dashboard/qr", icon: QrCode },
   { title: "Feedback", url: "/dashboard/feedback", icon: MessageSquare },
   { title: "Subscription", url: "/dashboard/subscription", icon: CreditCard },
-  { title: "Settings", url: "/dashboard/settings", icon: Settings },
 ];
 
 export const DashboardSidebar = () => {
@@ -38,8 +37,9 @@ export const DashboardSidebar = () => {
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-accent" />
-          <span className="font-display text-lg font-semibold text-sidebar-foreground">Venuecheck</span>
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-lg">V</span>
+          </div>
         </Link>
       </SidebarHeader>
       <SidebarContent>

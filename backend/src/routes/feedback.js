@@ -1,5 +1,6 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
+const { authenticate } = require('../middleware/auth');
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -90,11 +91,18 @@ router.get('/venues/:venueId/feedback', async (req, res) => {
   }
 });
 
-// Get feedback for host's venues (temporary - without auth for testing)
-router.get('/host/feedback', async (req, res) => {
+// Get feedback for host's venues
+router.get('/host/feedback', authenticate, async (req, res) => {
   try {
-    // For now, get all feedback (remove this in production)
+    const userId = req.user.userId;
+    
+    // Get feedback for venues owned by this user
     const feedback = await prisma.feedback.findMany({
+      where: {
+        venue: {
+          hostId: userId
+        }
+      },
       include: {
         venue: {
           select: {

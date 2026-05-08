@@ -6,8 +6,9 @@ export const SiteHeader = () => {
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-hero shadow-glow" />
-          <span className="font-display text-xl font-semibold tracking-tight">Venuecheck</span>
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-glow">
+            <span className="text-primary-foreground font-bold text-lg">V</span>
+          </div>
         </Link>
         <div className="flex items-center gap-2">
           <Link to="/auth">

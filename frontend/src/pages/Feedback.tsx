@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { Star, Send, MapPin, Users } from "lucide-react";
+import { Star, Send, MapPin, Users, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { FullPageEnhancedLoading } from "@/components/ui/EnhancedLoading";
@@ -30,6 +31,7 @@ const Feedback = () => {
   const [venue, setVenue] = useState<Venue | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [rating, setRating] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [guestName, setGuestName] = useState('');
@@ -87,10 +89,8 @@ const Feedback = () => {
       setGuestEmail('');
       setComment('');
       
-      // Redirect to venue page after 2 seconds
-      setTimeout(() => {
-        window.location.href = `/venue/${venueId}`;
-      }, 2000);
+      // Show success modal
+      setShowSuccessModal(true);
       
     } catch (error) {
       console.error('Failed to submit feedback:', error);
@@ -217,6 +217,31 @@ const Feedback = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="max-w-md mx-auto">
+          <DialogHeader className="text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogTitle className="text-2xl font-semibold text-center">
+              Thank You!
+            </DialogTitle>
+            <DialogDescription className="text-center text-base">
+              Your feedback has been successfully submitted. We appreciate your time and input!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-6 text-center">
+            <Button 
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full"
+            >
+              Done
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

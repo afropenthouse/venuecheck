@@ -15,7 +15,6 @@ import Venues from "./pages/dashboard/Venues";
 import Inspections from "./pages/dashboard/Inspections";
 import QR from "./pages/dashboard/QR";
 import DashboardFeedback from "./pages/dashboard/Feedback";
-import Settings from "./pages/dashboard/Settings";
 import SubscriptionManagement from "./pages/dashboard/SubscriptionManagement.tsx";
 
 const queryClient = new QueryClient();
@@ -38,8 +37,7 @@ const App = () => (
             <Route path="inspections" element={<Inspections />} />
             <Route path="qr" element={<QR />} />
             <Route path="feedback" element={<DashboardFeedback />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="subscription" element={<SubscriptionManagement />} />
+                        <Route path="subscription" element={<SubscriptionManagement />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

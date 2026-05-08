@@ -91,8 +91,9 @@ const Auth = () => {
       <div className="hidden bg-gradient-hero lg:block">
         <div className="flex h-full min-h-screen flex-col justify-between p-10 text-primary-foreground">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-accent" />
-            <span className="font-display text-xl font-semibold">Venuecheck</span>
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 flex items-center justify-center">
+              <span className="text-white font-bold text-lg">V</span>
+            </div>
           </Link>
           <div className="space-y-6">
             <div className="space-y-4">
