@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -253,5 +254,132 @@ router.post('/resend-verification', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Forgot password endpoint
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      // Don't reveal if user exists for security
+      return res.json({ message: 'If an account with that email exists, a password reset link has been sent.' });
+    }
+    
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    
+    // Save token to database
+    await prisma.user.update({
+      where: { email },
+      data: {
+        passwordResetToken: resetToken,
+        passwordResetExpires: resetExpires
+      }
+    });
+    
+    // Send reset email
+    await sendPasswordResetEmail(email, resetToken);
+    
+    res.json({ message: 'If an account with that email exists, a password reset link has been sent.' });
+  } catch (err) {
+    console.error('Forgot password error:', err);
+    res.status(500).json({ error: 'Failed to process request' });
+  }
+});
+
+// Reset password endpoint
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    
+    const user = await prisma.user.findFirst({
+      where: {
+        passwordResetToken: token,
+        passwordResetExpires: {
+          gt: new Date()
+        }
+      }
+    });
+    
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired reset token' });
+    }
+    
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    // Update password and clear reset token
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        passwordResetToken: null,
+        passwordResetExpires: null
+      }
+    });
+    
+    res.json({ message: 'Password reset successfully' });
+  } catch (err) {
+    console.error('Reset password error:', err);
+    res.status(500).json({ error: 'Failed to reset password' });
+  }
+});
+
+// Send password reset email
+const sendPasswordResetEmail = async (email, resetToken) => {
+  try {
+    const transporter = createTransporter();
+    
+    const currentYear = new Date().getFullYear();
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
+    
+    const mailOptions = {
+      from: `"Venuecheck" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: 'Password Reset Request',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Venuecheck</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Password Reset</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin-bottom: 20px;">
+            <h2 style="color: #333; margin: 0 0 20px 0;">Reset Your Password</h2>
+            <p style="color: #666; margin: 0 0 20px 0; line-height: 1.5;">
+              You requested to reset your password. Click the button below to create a new password:
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                Reset Password
+              </a>
+            </div>
+            <p style="color: #666; margin: 20px 0 0 0; line-height: 1.5;">
+              Or copy and paste this link into your browser:<br>
+              <span style="word-break: break-all; color: #667eea;">${resetUrl}</span>
+            </p>
+            <p style="color: #666; margin: 20px 0 0 0; line-height: 1.5;">
+              This link will expire in 10 minutes for security purposes.
+            </p>
+          </div>
+          
+          <div style="text-align: center; color: #999; font-size: 12px;">
+            <p>If you did not request this password reset, please disregard this email.</p>
+            <p>© ${currentYear} Venuecheck. All rights reserved.</p>
+          </div>
+        </div>
+      `
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log(`Password reset email sent to ${email}:`, result.messageId);
+    return result;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    throw new Error('Failed to send password reset email');
+  }
+};
 
 module.exports = router;

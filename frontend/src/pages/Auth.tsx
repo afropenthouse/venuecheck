@@ -89,14 +89,17 @@ const Auth = () => {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hidden bg-gradient-hero lg:block">
-        <div className="flex h-full min-h-screen flex-col justify-between p-10 text-primary-foreground">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">V</span>
-            </div>
-          </Link>
-          <div className="space-y-6">
-            <div className="space-y-4">
+        <div className="relative h-full min-h-screen">
+          <div className="absolute top-10 left-10 z-10">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg">V</span>
+              </div>
+            </Link>
+          </div>
+          <div className="flex h-full min-h-screen flex-col justify-center p-10 text-primary-foreground">
+            <div className="space-y-6">
+              <div className="space-y-4">
               <h2 className="font-display text-4xl leading-tight text-balance font-semibold">
                 Manage Your Venues with Ease
               </h2>
@@ -118,6 +121,7 @@ const Auth = () => {
                 <div className="text-xs text-primary-foreground/70 mt-1">Satisfaction</div>
               </div>
             </div>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +132,7 @@ const Auth = () => {
             <>
               <div className="text-center space-y-2">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 mb-4">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-hero shadow-glow"></div>
+                  <span className="text-3xl font-bold text-primary">V</span>
                 </div>
                 <h1 className="font-display text-3xl font-bold text-foreground">{isRegister ? "Create account" : "Welcome back"}</h1>
                 <p className="text-sm text-muted-foreground">{isRegister ? "Start hosting your venues and connecting with guests." : "Sign in to manage your venues and bookings."}</p>
@@ -198,6 +202,17 @@ const Auth = () => {
                     isRegister ? "Create account" : "Sign in"
                   )}
                 </Button>
+                
+                {!isRegister && (
+                  <div className="text-center">
+                    <Link 
+                      to="/forgot-password" 
+                      className="text-sm text-primary hover:text-primary/80 transition-colors"
+                    >
+                      Forgot your password?
+                    </Link>
+                  </div>
+                )}
               </form>
               
               <div className="text-center">

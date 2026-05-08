@@ -84,6 +84,38 @@ export const api = {
       const data = await res.json();
       console.log('Resend verification successful');
       return data;
+    },
+    forgotPassword: async (email: string) => {
+      console.log('API: Forgot password request for:', email);
+      const res = await fetch(`${API_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (!res.ok) {
+        console.error('Forgot password failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send reset link');
+      }
+      const data = await res.json();
+      console.log('Forgot password request successful');
+      return data;
+    },
+    resetPassword: async (token: string, newPassword: string) => {
+      console.log('API: Reset password request');
+      const res = await fetch(`${API_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, newPassword })
+      });
+      if (!res.ok) {
+        console.error('Reset password failed:', res.status, res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to reset password');
+      }
+      const data = await res.json();
+      console.log('Reset password successful');
+      return data;
     }
   },
   venues: {

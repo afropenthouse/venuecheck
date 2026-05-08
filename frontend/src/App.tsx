@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound.tsx";
 import VenueDetail from "./pages/VenueDetail.tsx";
 import Feedback from "./pages/Feedback.tsx";
 import Auth from "./pages/Auth.tsx";
+import ForgotPassword from "./pages/ForgotPassword.tsx";
+import ResetPassword from "./pages/ResetPassword.tsx";
 import PaymentVerify from "./pages/PaymentVerify.tsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.tsx";
 import Overview from "./pages/dashboard/Overview";
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/venue/:id" element={<VenueDetail />} />
           <Route path="/feedback/:venueId" element={<Feedback />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/payment/verify" element={<PaymentVerify />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
